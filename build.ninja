@@ -1,0 +1,16 @@
+# Specify the Ninja version
+ninja_required_version = 1.3
+
+# Rule for compiling to a DLL
+rule dll
+  command = gcc -shared -o $out $in
+  description = Building DLL $out
+
+rule header
+  command = cp $in $out
+  description = Copying Header $out
+
+# Build target
+build build/lib_adder.dll: dll src/adder.c
+
+build build/lib_adder.h: header src/adder.h
