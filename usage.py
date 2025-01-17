@@ -1,10 +1,11 @@
 from cffi import FFI
+from pathlib import Path
 
 class Adder_DLL:
     def __init__(self, dll_path: str, header_path: str) -> None:
         self.ffi_instance = FFI()
 
-            # Read the contents of the header file
+        # Read the contents of the header file
         with open(header_path) as header_file:
             without_preprocessor = [line for line in header_file if not line.strip().startswith("#")]
             header_content = "".join(without_preprocessor)
@@ -13,7 +14,8 @@ class Adder_DLL:
         self.ffi_instance.cdef(header_content)
 
         # Load the DLL
-        self.lib_dll =  self.ffi_instance.dlopen(dll_path,flags=0)
+        abs_dll_path = Path(dll_path).resolve()
+        self.lib_dll =  self.ffi_instance.dlopen(str(abs_dll_path))
 
     def execute_addition(self, summandA: int, summandB: int):
 
